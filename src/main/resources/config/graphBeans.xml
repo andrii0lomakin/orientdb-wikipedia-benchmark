@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+    http://www.springframework.org/schema/util
+    http://www.springframework.org/schema/util/spring-util-2.5.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+    <!--
+        ===================================================================================
+        The main test runner class loaded with a choice of graph db back end
+        ===================================================================================
+     -->
+    <bean id="testRunner" class="com.tinkerpop.graph.benchmark.TestBatchGraphLoad" lazy-init="true">
+        <property name="benchmarkResultsFilename" value="results/benchmark.csv"/>
+        <property name="inputTestDataFile" value="data/page_links_en.nt.bz2"/>
+        <!-- ============ Pick a choice of graph loader implementation here ====================== -->
+        <property name="graphLoaderService" ref="orientLoader"/>
+
+    </bean>
+
+
+    <bean id="orientLoader" class="com.tinkerpop.graph.benchmark.orientdb.OrientDbNativeLoaderImpl" lazy-init="true"
+          init-method="init">
+        <property name="orientDbDirName" value="indexes/wikipediaOrientDb"/>
+        <property name="orientDbName" value="wikipediaOrientDb"/>
+    </bean>
+</beans>
