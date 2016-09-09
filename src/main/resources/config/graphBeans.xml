@@ -9,23 +9,52 @@
     http://www.springframework.org/schema/util/spring-util-2.5.xsd
     http://www.springframework.org/schema/context
     http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+
     <!--
         ===================================================================================
         The main test runner class loaded with a choice of graph db back end
         ===================================================================================
      -->
-    <bean id="testRunner" class="com.tinkerpop.graph.benchmark.TestBatchGraphLoad" lazy-init="true">
+    <bean id="loadTestRunner" class="com.tinkerpop.graph.benchmark.TestGraphLoad" lazy-init="true">
         <property name="benchmarkResultsFilename" value="results/benchmark.csv"/>
         <property name="inputTestDataFile" value="data/page_links_en.nt.bz2"/>
         <!-- ============ Pick a choice of graph loader implementation here ====================== -->
-        <property name="graphLoaderService" ref="orientLoader"/>
-
+        <property name="graphLoaderService" ref="orientLoader" />
+        <!--<property name="graphLoaderService" ref="neoLoader"/>-->
+        <!--<property name="graphLoaderService" ref="neoBatchLoader"/-->
     </bean>
 
-
-    <bean id="orientLoader" class="com.tinkerpop.graph.benchmark.orientdb.OrientDbNativeLoaderImpl" lazy-init="true"
+    <bean id="orientLoader" class="com.tinkerpop.graph.benchmark.orientdb.loader.OrientDbLoaderImpl" lazy-init="true"
           init-method="init">
         <property name="orientDbDirName" value="indexes/wikipediaOrientDb"/>
         <property name="orientDbName" value="wikipediaOrientDb"/>
+    </bean>
+
+    <bean id="neoBatchLoader" lazy-init="true" class="com.tinkerpop.graph.benchmark.neo4j.loader.Neo4JBatchLoaderImpl"
+          init-method="init">
+        <property value="indexes/wikipediaNeo4j" name="neoDbDirName"/>
+    </bean>
+
+    <bean id="neoLoader" lazy-init="true" class="com.tinkerpop.graph.benchmark.neo4j.loader.Neo4JLoaderImpl" init-method="init">
+        <property value="indexes/wikipediaNeo4j" name="neoDbDirName"/>
+    </bean>
+
+    <bean id="traversalTestRunner" class="com.tinkerpop.graph.benchmark.TestGraphTraversal" lazy-init="true">
+        <property name="seed" value="42"/>
+        <property name="iterations" value="5000"/>
+
+        <property name="graphTraverserService" ref="orientTraverser"/>
+        <!--<property name="graphTraverserService" ref="neoTraverser"/>-->
+    </bean>
+
+    <bean id="orientTraverser" class="com.tinkerpop.graph.benchmark.orientdb.traverser.OrientDbTraverserImpl" lazy-init="true"
+          init-method="init">
+        <property name="orientDbDirName" value="indexes/wikipediaOrientDb"/>
+        <property name="orientDbName" value="wikipediaOrientDb"/>
+    </bean>
+
+    <bean id="neoTraverser" class="com.tinkerpop.graph.benchmark.neo4j.traverser.Neo4jTraverserImpl" lazy-init="true"
+          init-method="init">
+        <property value="indexes/wikipediaNeo4j" name="neoDbDirName"/>
     </bean>
 </beans>

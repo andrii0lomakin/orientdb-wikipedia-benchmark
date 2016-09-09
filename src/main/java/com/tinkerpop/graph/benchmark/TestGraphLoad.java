@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
  *
  * @author MAHarwood
  */
-public class TestBatchGraphLoad {
+public class TestGraphLoad {
 
 	String benchmarkResultsFilename;
 	String inputTestDataFile;
@@ -27,7 +27,7 @@ public class TestBatchGraphLoad {
 	int batchReportTime = 100000;
 	//The name of a file which if found will stop the ingest at the next batch progress report time
 	String stopFileName = "stop.txt";
-	int numRecordsToLoad = 1000000; //set to a value >0 to limit the scope of the test
+	int numRecordsToLoad = 2000000; //set to a value >0 to limit the scope of the test
 
 	GraphLoaderService graphLoaderService;
 
@@ -40,7 +40,7 @@ public class TestBatchGraphLoad {
 		String testFile = "/config/graphBeans.xml";
 		GenericXmlApplicationContext context = new GenericXmlApplicationContext();
 		context.load(new ClassPathResource(testFile));
-		TestBatchGraphLoad testRunner = (TestBatchGraphLoad) context.getBean("testRunner");
+		TestGraphLoad testRunner = (TestGraphLoad) context.getBean("loadTestRunner");
 		testRunner.runTest();
 	}
 
