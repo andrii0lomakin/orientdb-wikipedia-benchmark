@@ -10,7 +10,6 @@ import com.tinkerpop.graph.benchmark.GraphTraverserService;
 
 import java.io.File;
 import java.util.List;
-import java.util.Random;
 
 /**
  * @author Sergey Sitnikov
@@ -18,8 +17,6 @@ import java.util.Random;
 public class OrientDbTraverserImpl implements GraphTraverserService {
   private String orientDbDirName;
   private String orientDbName;
-
-  private Random random;
 
   private OrientGraph graph;
   private long        pageCount;
@@ -40,13 +37,13 @@ public class OrientDbTraverserImpl implements GraphTraverserService {
   }
 
   @Override
-  public void setSeed(long seed) {
-    random = new Random(seed);
+  public long numberOfVerities() {
+    return pageCount;
   }
 
   @Override
-  public String randomVertex() {
-    return graph.getVertices("Page.serial", Math.abs(random.nextLong()) % pageCount).iterator().next().getProperty("udk");
+  public String getVertex(long serial) {
+    return graph.getVertices("Page.serial", serial).iterator().next().getProperty("udk");
   }
 
   @Override
