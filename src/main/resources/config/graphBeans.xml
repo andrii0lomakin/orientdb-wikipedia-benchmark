@@ -26,8 +26,8 @@
 
     <bean id="orientLoader" class="com.tinkerpop.graph.benchmark.orientdb.loader.OrientDbLoaderImpl" lazy-init="true"
           init-method="init">
-        <property name="orientDbDirName" value="/Volumes/ram/wikipediaOrientDb"/>
-        <!--<property name="orientDbDirName" value="indexes/wikipediaOrientDb"/>-->
+        <!--<property name="orientDbDirName" value="/Volumes/ram/wikipediaOrientDb"/>-->
+        <property name="orientDbDirName" value="indexes/wikipediaOrientDb"/>
         <property name="orientDbName" value="wikipediaOrientDb"/>
     </bean>
 
@@ -52,8 +52,8 @@
 
     <bean id="orientTraverser" class="com.tinkerpop.graph.benchmark.orientdb.traverser.OrientDbTraverserImpl" lazy-init="true"
           init-method="init">
-        <property name="orientDbDirName" value="/Volumes/ram/wikipediaOrientDb"/>
-        <!--<property name="orientDbDirName" value="indexes/wikipediaOrientDb"/>-->
+        <!--<property name="orientDbDirName" value="/Volumes/ram/wikipediaOrientDb"/>-->
+        <property name="orientDbDirName" value="indexes/wikipediaOrientDb"/>
         <property name="orientDbName" value="wikipediaOrientDb"/>
     </bean>
 
