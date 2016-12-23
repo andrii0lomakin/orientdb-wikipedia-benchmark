@@ -27,7 +27,7 @@ public class TestGraphLoad {
 	int batchReportTime = 100000;
 	//The name of a file which if found will stop the ingest at the next batch progress report time
 	String stopFileName = "stop.txt";
-	int numRecordsToLoad = 2000000; //set to a value >0 to limit the scope of the test
+	int numRecordsToLoad = 0; //set to a value >0 to limit the scope of the test
 
 	GraphLoaderService graphLoaderService;
 
