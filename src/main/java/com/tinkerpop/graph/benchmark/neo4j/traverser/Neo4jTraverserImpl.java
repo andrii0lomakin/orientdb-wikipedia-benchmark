@@ -12,15 +12,12 @@ import org.neo4j.helpers.collection.IteratorUtil;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Random;
 
 /**
  * @author Sergey Sitnikov
  */
 public class Neo4jTraverserImpl implements GraphTraverserService {
   private String neoDbDirName;
-
-  private Random random;
 
   private GraphDatabaseService graph;
   private long                 pageCount;
@@ -48,15 +45,14 @@ public class Neo4jTraverserImpl implements GraphTraverserService {
   }
 
   @Override
-  public void setSeed(long seed) {
-    random = new Random(seed);
+  public long numberOfVerities() {
+    return pageCount;
   }
 
   @Override
-  public String randomVertex() {
+  public String getVertex(long serial) {
     try (Transaction tx = graph.beginTx()) {
-      final String vertex = (String) graph.findNode(DynamicLabel.label("Page"), "serial", Math.abs(random.nextLong()) % pageCount)
-          .getProperty("udk");
+      final String vertex = (String) graph.findNode(DynamicLabel.label("Page"), "serial", serial).getProperty("udk");
       tx.success();
       return vertex;
     }

@@ -26,6 +26,7 @@
 
     <bean id="orientLoader" class="com.tinkerpop.graph.benchmark.orientdb.loader.OrientDbLoaderImpl" lazy-init="true"
           init-method="init">
+        <!--<property name="orientDbDirName" value="/Volumes/ram/wikipediaOrientDb"/>-->
         <property name="orientDbDirName" value="indexes/wikipediaOrientDb"/>
         <property name="orientDbName" value="wikipediaOrientDb"/>
     </bean>
@@ -42,6 +43,8 @@
     <bean id="traversalTestRunner" class="com.tinkerpop.graph.benchmark.TestGraphTraversal" lazy-init="true">
         <property name="seed" value="42"/>
         <property name="iterations" value="5000"/>
+        <!--<property name="distributionName" value="uniform"/>-->
+        <property name="distributionName" value="zipf"/>
 
         <property name="graphTraverserService" ref="orientTraverser"/>
         <!--<property name="graphTraverserService" ref="neoTraverser"/>-->
@@ -49,6 +52,7 @@
 
     <bean id="orientTraverser" class="com.tinkerpop.graph.benchmark.orientdb.traverser.OrientDbTraverserImpl" lazy-init="true"
           init-method="init">
+        <!--<property name="orientDbDirName" value="/Volumes/ram/wikipediaOrientDb"/>-->
         <property name="orientDbDirName" value="indexes/wikipediaOrientDb"/>
         <property name="orientDbName" value="wikipediaOrientDb"/>
     </bean>

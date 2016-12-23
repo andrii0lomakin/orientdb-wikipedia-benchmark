@@ -4,9 +4,9 @@ public interface GraphTraverserService {
 
   boolean databaseExists();
 
-  void setSeed(long seed);
+  long numberOfVerities();
 
-  String randomVertex();
+  String getVertex(long serial);
 
   String[] shortestPath(String from, String to);
 

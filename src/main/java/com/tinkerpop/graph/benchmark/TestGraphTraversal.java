@@ -1,5 +1,10 @@
 package com.tinkerpop.graph.benchmark;
 
+import org.apache.commons.math3.distribution.IntegerDistribution;
+import org.apache.commons.math3.distribution.UniformIntegerDistribution;
+import org.apache.commons.math3.distribution.ZipfDistribution;
+import org.apache.commons.math3.random.JDKRandomGenerator;
+import org.apache.commons.math3.random.RandomGenerator;
 import org.springframework.context.support.GenericXmlApplicationContext;
 import org.springframework.core.io.ClassPathResource;
 
@@ -11,6 +16,8 @@ public class TestGraphTraversal {
   private GraphTraverserService graphTraverserService;
   private long                  seed;
   private int                   iterations;
+
+  private String distributionName;
 
   public static void main(String[] args) throws Exception {
     String testFile = "/config/graphBeans.xml";
@@ -26,28 +33,49 @@ public class TestGraphTraversal {
       return;
     }
 
-    graphTraverserService.setSeed(seed);
+    final RandomGenerator randomGenerator = new JDKRandomGenerator();
+    randomGenerator.setSeed(seed);
+
+    if (graphTraverserService.numberOfVerities() > Integer.MAX_VALUE)
+      throw new IllegalStateException();
+
+    final IntegerDistribution distribution;
+    switch (distributionName) {
+    case "uniform":
+      distribution = new UniformIntegerDistribution(randomGenerator, 0, (int) graphTraverserService.numberOfVerities() - 1);
+      break;
+    case "zipf":
+      distribution = new ZipfDistribution(randomGenerator, (int) graphTraverserService.numberOfVerities(), 0.5);
+      break;
+    default:
+      throw new IllegalStateException();
+    }
 
     final List<String[]> paths = new ArrayList<>();
 
     long total = 0;
     for (int t = 0; t < iterations; ++t) {
-      final String from = graphTraverserService.randomVertex();
-      final String to = graphTraverserService.randomVertex();
-      System.out.print("\nSearching for shortest path from '" + from + "' to '" + to + "'... ");
+      final boolean report = t % 10000 == 0;
+
+      final String from = graphTraverserService.getVertex(distribution.sample());
+      final String to = graphTraverserService.getVertex(distribution.sample());
+      if (report)
+        System.out.print("\nSearching for shortest path from '" + from + "' to '" + to + "'... ");
       final long start = System.nanoTime();
       final String[] path = graphTraverserService.shortestPath(from, to);
       final long elapsed = System.nanoTime() - start;
-      System.out.println("done in " + elapsed / 1000000 + "ms");
       total += elapsed;
 
-      for (int i = 0; i < path.length; ++i) {
-        final String vertex = path[i];
-        System.out.print(vertex);
-        if (i != path.length - 1)
-          System.out.print(" -> ");
+      if (report) {
+        System.out.println("done in " + elapsed / 1000000 + "ms");
+        for (int i = 0; i < path.length; ++i) {
+          final String vertex = path[i];
+          System.out.print(vertex);
+          if (i != path.length - 1)
+            System.out.print(" -> ");
+        }
+        System.out.println();
       }
-      System.out.println();
 
       if (path.length != 0)
         paths.add(path);
@@ -88,5 +116,13 @@ public class TestGraphTraversal {
 
   public void setIterations(int iterations) {
     this.iterations = iterations;
+  }
+
+  public String getDistributionName() {
+    return distributionName;
+  }
+
+  public void setDistributionName(String distributionName) {
+    this.distributionName = distributionName;
   }
 }
