@@ -66,9 +66,7 @@
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>1.5.0</version>
                 <configuration>
-                    <arguments>
-                        <argument>-XX:MaxDirectMemorySize=64260m</argument>
-                    </arguments>
+                    <commandlineArgs>-XX:MaxDirectMemorySize=64260m</commandlineArgs>
                 </configuration>
             </plugin>
         </plugins>
